@@ -1,0 +1,153 @@
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: radial-gradient(circle, #1a1a1a, #000);
+    color: #fff;
+    overflow-x: hidden;
+}
+
+/* Particle.js Background */
+#particles-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* Neon Text Effect */
+.neon-text {
+    color: #fff;
+    text-shadow:
+        0 0 5px #00fffc,
+        0 0 10px #00fffc,
+        0 0 20px #00fffc,
+        0 0 40px #00fffc;
+    animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        text-shadow:
+            0 0 5px #00fffc,
+            0 0 10px #00fffc,
+            0 0 20px #00fffc,
+            0 0 40px #00fffc;
+    }
+    to {
+        text-shadow:
+            0 0 10px #00fffc,
+            0 0 20px #00fffc,
+            0 0 40px #00fffc,
+            0 0 80px #00fffc;
+    }
+}
+
+/* Neon Button Effect */
+.neon-button {
+    background: transparent;
+    border: 2px solid #00fffc;
+    color: #00fffc;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow:
+        0 0 5px #00fffc,
+        0 0 10px #00fffc;
+}
+
+.neon-button:hover {
+    background: #00fffc;
+    color: #000;
+    box-shadow:
+        0 0 20px #00fffc,
+        0 0 40px #00fffc;
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 4rem;
+    margin: 0;
+}
+
+.hero p {
+    font-size: 1.5rem;
+    margin: 10px 0 20px;
+}
+
+/* Card Styles */
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Services Section */
+.services {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.service-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow:
+        0 0 10px #00fffc,
+        0 0 20px #00fffc;
+}
+
+/* Contact Section */
+.contact {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.contact-form input, .contact-form textarea {
+    margin: 10px 0;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.2);
+}
