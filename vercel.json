@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "name": "hybrid-energy-dashboard",
+  "builds": [
+    {
+      "src": "build/web/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/build/web/$1"
+    }
+  ],
+  "buildCommand": "flutter build web --release --web-renderer canvaskit",
+  "outputDirectory": "build/web",
+  "installCommand": "flutter pub get"
+}

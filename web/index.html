@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Hybrid Energy Dashboard">
+  
+  <!-- IMPORTANT: Viewport configuration -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Hybrid Energy Dashboard">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>Hybrid Energy Dashboard</title>
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    /* Loading styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0175C2, #00B4DB);
+      overflow: hidden;
+    }
+    
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      font-family: Arial, sans-serif;
+      color: white;
+      text-align: center;
+    }
+    
+    .loading-spinner {
+      border: 4px solid rgba(255,255,255,0.3);
+      border-top: 4px solid #ffffff;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 2s linear infinite;
+      margin-bottom: 20px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    #flutter_host {
+      width: 100%;
+      height: 100vh;
+      border: none;
+    }
+
+    /* Ensure Flutter app takes full screen */
+    html, body, #flutter_host {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .error-message {
+      background: rgba(255, 0, 0, 0.1);
+      border: 1px solid rgba(255, 0, 0, 0.3);
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading" class="loading">
+    <div class="loading-spinner"></div>
+    <h2>Hybrid Energy Dashboard</h2>
+    <p>Loading application...</p>
+  </div>
+
+  <!-- Flutter app container -->
+  <div id="flutter_host"></div>
+
+  <!-- Flutter SDK Script -->
+  <script>
+    // Service worker version
+    var serviceWorkerVersion = null;
+
+    // Main Flutter loading logic
+    window.addEventListener('load', function(ev) {
+      console.log('Page loaded, initializing Flutter...');
+      
+      // Create base href if not present
+      if (!document.querySelector('base')) {
+        var base = document.createElement('base');
+        base.href = '/';
+        document.head.appendChild(base);
+      }
+
+      // Load Flutter script dynamically
+      var script = document.createElement('script');
+      script.src = 'flutter.js';
+      script.defer = true;
+      
+      script.onload = function() {
+        console.log('Flutter.js loaded successfully');
+        initializeFlutterApp();
+      };
+      
+      script.onerror = function() {
+        console.error('Failed to load flutter.js');
+        showError('Failed to load Flutter runtime. Please refresh the page.');
+      };
+      
+      document.head.appendChild(script);
+    });
+
+    function initializeFlutterApp() {
+      if (typeof _flutter === 'undefined') {
+        showError('Flutter is not supported in this browser.');
+        return;
+      }
+
+      console.log('Initializing Flutter app...');
+
+      _flutter.loader.loadEntrypoint({
+        serviceWorker: {
+          serviceWorkerVersion: serviceWorkerVersion,
+        },
+        onEntrypointLoaded: async function(engineInitializer) {
+          try {
+            console.log('Flutter entrypoint loaded, initializing engine...');
+            
+            const appRunner = await engineInitializer.initializeEngine({
+              hostElement: document.getElementById('flutter_host'),
+              // Configuration for web
+              renderer: 'canvaskit', // or 'html' for better compatibility
+            });
+
+            console.log('Flutter engine initialized, running app...');
+            await appRunner.runApp();
+            
+            // Hide loading screen
+            console.log('Flutter app running, hiding loading screen...');
+            document.getElementById('loading').style.display = 'none';
+            
+          } catch (error) {
+            console.error('Error initializing Flutter app:', error);
+            showError('Error loading application: ' + error.message);
+          }
+        }
+      }).catch(function(error) {
+        console.error('Error in Flutter loader:', error);
+        showError('Failed to load application. Please check your connection and refresh.');
+      });
+    }
+
+    function showError(message) {
+      const loadingElement = document.getElementById('loading');
+      if (loadingElement) {
+        loadingElement.innerHTML = 
+          '<div class="error-message">' +
+          '<h2>Application Error</h2>' +
+          '<p>' + message + '</p>' +
+          '<button onclick="window.location.reload()" style="padding: 10px 20px; margin-top: 10px; background: white; border: none; border-radius: 5px; cursor: pointer;">Refresh Page</button>' +
+          '</div>';
+      }
+    }
+
+    // Fallback timeout
+    setTimeout(function() {
+      const loadingElement = document.getElementById('loading');
+      if (loadingElement && loadingElement.style.display !== 'none') {
+        console.warn('App loading is taking longer than expected...');
+        loadingElement.innerHTML += '<p style="color: yellow;">Still loading... If this persists, please refresh.</p>';
+      }
+    }, 10000);
+  </script>
+</body>
+</html>
